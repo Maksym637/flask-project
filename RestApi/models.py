@@ -45,7 +45,7 @@ class User(BaseModel):
     first_name = Column(VARCHAR(45))
     last_name = Column(VARCHAR(45))
     email = Column(VARCHAR(45))
-    password = Column(VARCHAR(45))
+    password = Column(VARCHAR(256))
     phone = Column(VARCHAR(15))
     user_status = Column(Boolean)
 
