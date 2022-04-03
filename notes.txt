@@ -1,0 +1,9 @@
+-------------------------------------------------------------------
+> UNIT TESTING: 
+python -m unittest tests.test_user
+pytest test_user.py
+-------------------------------------------------------------------
+> COVERAGE:
+coverage run -m unittest tests.test_user
+coverage report -m
+-------------------------------------------------------------------
