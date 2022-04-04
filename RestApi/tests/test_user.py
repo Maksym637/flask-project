@@ -139,7 +139,7 @@ class TestUser(unittest.TestCase):
             self.assertEqual(response.status_code, 400)
     
     def test_update_error(self):
-        url_id = f'/user/100000'
+        url_id = '/user/100000'
         updated_fields = {
             "first_name": "updated_first_name",
             "last_name": "updated_last_name",
