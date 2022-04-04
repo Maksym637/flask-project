@@ -1,6 +1,9 @@
 -------------------------------------------------------------------
+... \flask-project\RestApi> RUN HERE
+-------------------------------------------------------------------
 > UNIT TESTING: 
 python -m unittest tests.test_user
+python -m unittest (ran all tests)
 pytest test_user.py
 -------------------------------------------------------------------
 > COVERAGE:
