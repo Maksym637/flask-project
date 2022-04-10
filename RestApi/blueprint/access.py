@@ -11,6 +11,13 @@ access = Blueprint("access", __name__)
 
 @access.route("/access", methods=["POST"])
 def create_access():
+    """_summary_
+    Create and submit reservation to the server.
+
+    Returns:
+        json: returns all reservation attributes.
+    """
+
     data = request.get_json(force=True)
 
     try:
@@ -62,6 +69,16 @@ def create_access():
 
 @access.route("/access/<int:user_id>", methods=["GET"])
 def get_access(user_id):
+    """_summary_
+    Retrieves all data about reservation from the server by user_id.
+
+    Args:
+        user_id (int): user's primary key
+
+    Returns:
+        json: returns all reservation attributes.
+    """
+
     entry = Session.query(User).filter_by(id=user_id).first()
     if entry is None:
         return Response(status=404, response="[SUCH USER ID DOES NOT EXIST. THUS, THERE ARE NO RESERVATION FOR HIM]")
@@ -71,6 +88,16 @@ def get_access(user_id):
 
 @access.route("/access/<int:auditorium_id>", methods=["DELETE"])
 def delete_access(auditorium_id):
+    """_summary_
+    Deletes all reservation data from the server.
+
+    Args:
+        auditorium_id (int): auditorium's primary key
+
+    Returns:
+        json: returns all reservation attributes.
+    """
+    
     entry = Session.query(Auditorium).filter_by(id=auditorium_id).first()
     if entry is None:
         return Response(status=404, response="[SUCH AUDITORIUM ID DOES NOT EXIST]")
