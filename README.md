@@ -31,12 +31,9 @@ The RESTful API is built using _Flask_ framework and _MySQL_ database.
     "user_status": true
   }
   ```
-  * GET ('/user/\<string:username>') : retrieves all data about user from the server by his username.
-  _/user/MO_
-  * GET ('/user/\<int:id>') : retrieves all data about user from the server by his id.
-  _/user/1_
-  * PUT ('/user/\<int:id>') : update all user data already on the server.
-  _/user/1_
+  * GET ('/user/\<string:username>') : retrieves all data about user from the server by his username. (/user/MO)
+  * GET ('/user/\<int:id>') : retrieves all data about user from the server by his id. (/user/1)
+  * PUT ('/user/\<int:id>') : update all user data already on the server. (/user/1)
   ```json
   {
     "username": "MO",
@@ -48,8 +45,9 @@ The RESTful API is built using _Flask_ framework and _MySQL_ database.
     "user_status": true
   }
   ```
-  * DELETE ('/user/\<string:username>') : deletes all user data from the server.
-  _/user/MO_
+  * DELETE ('/user/\<string:username>') : deletes all user data from the server. (/user/MO)
+* **auditorium**
+  * ...
 ***
 ### Information links
 Below you can find links with the information that I used writing this project:
