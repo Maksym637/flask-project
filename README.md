@@ -18,7 +18,7 @@ The application should allow:
 The RESTful API is built using _Flask_ framework and _MySQL_ database.
 ***
 ### API endpoints
-* **user**
+* **user :**
   * POST ('/user') : create and submit user to the server.
   ```json
   {
@@ -46,7 +46,27 @@ The RESTful API is built using _Flask_ framework and _MySQL_ database.
   }
   ```
   * DELETE ('/user/\<string:username>') : deletes all user data from the server. (/user/MO)
-* **auditorium**
+* **auditorium :**
+  * POST ('/auditorium') : create and submit auditorium to the server.
+  ```json
+  {
+    "number": 10,
+    "max_people": 100,
+    "is_free": true
+  }
+  ```
+  * GET ('/auditorium') : retrieves all data about auditoriums from the server. (/auditorium)
+  * GET ('/auditorium/\<int:id>') : retrieves all data about auditorium from the server by its id. (/auditorium/1)
+  * PUT ('/auditorium/\<int:id>') : update all auditorium data already on the server. (/auditorium/1)
+  ```json
+  {
+    "number": 10,
+    "max_people": 350,
+    "is_free": true
+  }
+  ```
+  * DELETE ('/auditorium/\<int:id>') : deletes all auditorium data from the server. (/auditorium/1)
+* **access :**
   * ...
 ***
 ### Information links
