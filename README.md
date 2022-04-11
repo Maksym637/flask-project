@@ -4,6 +4,7 @@
 ***
 ### Description
 Simple application for reservation auditoriums on a specific time.
+
 The application uses RESTful API for storing data and reading from a database.
 
 The application should allow:
