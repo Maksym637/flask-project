@@ -23,8 +23,12 @@ The RESTful API is built using _Flask_ framework and _MySQL_ database.
 Below you can find links with the information that I used writing this project:
 
 [_Flask documentation_](https://flask.palletsprojects.com/en/2.1.x/)
+
 [_Database connection_](https://www.sqlalchemy.org/)
+
 [_Data validation_](https://marshmallow.readthedocs.io/en/stable/)
+
 [_Flask-HTTP authorization_](https://flask-httpauth.readthedocs.io/en/latest/#basic-authentication-examples)
+
 [_Application testing_](https://docs.python.org/3/library/unittest.html)
 ***
