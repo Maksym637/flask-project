@@ -18,6 +18,38 @@ The application should allow:
 The RESTful API is built using _Flask_ framework and _MySQL_ database.
 ***
 ### API endpoints
+* **user**
+  * POST ('/user') : create and submit user to the server.
+  ```json
+  {
+    "username": "MO",
+    "first_name": "Maksym",
+    "last_name": "Oliinyk",
+    "email": "maks@gmail.com",
+    "password": "212121",
+    "phone": "2222222",
+    "user_status": true
+  }
+  ```
+  * GET ('/user/\<string:username>') : retrieves all data about user from the server by his username.
+  _/user/MO_
+  * GET ('/user/\<int:id>') : retrieves all data about user from the server by his id.
+  _/user/1_
+  * PUT ('/user/\<int:id>') : update all user data already on the server.
+  _/user/1_
+  ```json
+  {
+    "username": "MO",
+    "first_name": "Maksym",
+    "last_name": "Oliinyk",
+    "email": "maks@gmail.com",
+    "password": "new_password",
+    "phone": "1111111",
+    "user_status": true
+  }
+  ```
+  * DELETE ('/user/\<string:username>') : deletes all user data from the server.
+  _/user/MO_
 ***
 ### Information links
 Below you can find links with the information that I used writing this project:
