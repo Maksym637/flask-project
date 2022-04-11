@@ -67,7 +67,17 @@ The RESTful API is built using _Flask_ framework and _MySQL_ database.
   ```
   * DELETE ('/auditorium/\<int:id>') : deletes all auditorium data from the server. (/auditorium/1)
 * **access :**
-  * ...
+  * POST ('/access') : create and submit reservation to the server.
+  ```json
+  {
+    "auditorium_id": 1,
+    "user_id": 1,
+    "start":"2023-5-28 12:00:00",
+    "end": "2023-5-28 14:30:00"
+  }
+  ```
+  * GET ('/access/\<int:user_id>') : retrieves all data about reservation from the server by user_id. (/access/1)
+  * DELETE ('/access/\<int:auditorium_id>') : deletes all reservation data from the server. (/access/1)
 ***
 ### Information links
 Below you can find links with the information that I used writing this project:
