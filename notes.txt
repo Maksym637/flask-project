@@ -1,9 +1,14 @@
 -------------------------------------------------------------------
 ... \flask-project\RestApi> RUN HERE
 -------------------------------------------------------------------
+> API:
+1. set FLASK_APP=run_app.py
+   flask run
+2. python run_app.py
+-------------------------------------------------------------------
 > UNIT TESTING: 
 python -m unittest tests.test_user
-python -m unittest (ran all tests)
+python -m unittest (run all tests)
 pytest test_user.py
 -------------------------------------------------------------------
 > COVERAGE:
