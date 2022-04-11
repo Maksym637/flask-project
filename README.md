@@ -1,4 +1,22 @@
 # flask-project
-Create a service for reserving audiences for a specific date and time from 1 hour to 5 days. 
-Users have the ability to reserve audiences, as well as edit, cancel and delete them. 
-Warn users against overlays (two users cannot reserve an audience for a certain period of time)
+***
+#### Prepared by *Maksym Oliinyk*
+***
+### Description
+Simple application for reservation auditoriums on a specific time.
+The application uses RESTful API for storing data and reading from a database.
+
+The application should allow:
+* reservation auditoriums for a specific date and time from 1 to 5 hours;
+* users must have the ability to reserve auditoriums, edit, cancel and
+  delete them;
+* warn users about overlays :
+  * two users cannot reserve an auditorium for the same time,
+  * reservation times must not overlap.
+
+The RESTful API is built using _Flask_ framework and _MySQL_ database.
+***
+### API endpoints
+***
+### Information links
+***
