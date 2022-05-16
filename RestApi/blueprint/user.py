@@ -129,7 +129,7 @@ def get_user_by_username(username):
     login_entry = Session.query(User).filter_by(username=auth.current_user()).first()
     if entry is None:
         return Response(status=404, response="[SUCH USERNAME DOES NOT EXIST]")
-    if login_entry.username == username:
+    if login_entry.username == username or login_entry.user_status == 1:
         return jsonify(UserSchema().dump(entry))
     return Response(status=401, response="[YOU HAVE NO ACCESS]")
 
@@ -215,7 +215,7 @@ def delete_user_by_username(username):
     login_entry = Session.query(User).filter_by(username=auth.current_user()).first()
     if entry is None:
         return Response(status=404, response="[SUCH USERNAME DOES NOT EXIST]")
-    if login_entry.username == username:
+    if login_entry.username == username or login_entry.user_status == 1:
         Session.delete(entry)
         Session.commit()
         return jsonify(UserSchema().dump(entry))
