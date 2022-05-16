@@ -1,6 +1,7 @@
 from run_app import app
 from models import Session, User
 import unittest
+import json
 
 
 class TestUser(unittest.TestCase):
@@ -11,6 +12,18 @@ class TestUser(unittest.TestCase):
     """
 
     url = '/user'
+
+    user = {
+            "username": "UT",
+            "first_name": ".......",
+            "last_name": ".......",
+            "email": ".......",
+            "password": "21212121",
+            "phone": ".......",
+            "user_status": True
+        }
+    
+    headers = {"Authorization": f"Basic VVQ6MjEyMTIxMjE="}
 
     def setUp(self):
         self.app_context = app.app_context()
@@ -68,103 +81,82 @@ class TestUser(unittest.TestCase):
         for i in range(len(users)):
             response = self.client.post(self.url, json=users[i])
             self.assertEqual(response.status_code, 400)
-        
-    def test_retrieve(self):
+    
+    def test_login(self):
         user = {
             "username": "UT",
-            "first_name": ".......",
-            "last_name": ".......",
-            "email": ".......",
-            "password": "21212121",
-            "phone": ".......",
+            "first_name": "User",
+            "last_name": "Test",
+            "email": "UT@gmail.com",
+            "password": "232323",
+            "phone": "2381843",
             "user_status": True
             }
-        created = self.client.post(self.url, json=user)
+        self.client.post(self.url, json=user)
+
+        url_login = '/login'
+        response = self.client.get(url_login, data=json.dumps({"username": "UT", "password": "232323"}))
+        self.assertEqual(response.status_code, 200)
+    
+    def test_retrieve(self):
+        created = self.client.post(self.url, json=self.user)
 
         url_id = f'/user/{created.json["id"]}'
-        response = self.client.get(url_id)
+        response = self.client.get(url_id, headers=self.headers)
         self.assertEqual(response.status_code, 200)
 
         url_username = f'/user/{created.json["username"]}'
-        response = self.client.get(url_username)
+        response = self.client.get(url_username, headers=self.headers)
         self.assertEqual(response.status_code, 200)
     
     def test_retrieve_error(self):
+        self.client.post(self.url, json=self.user)
+
         url_id = '/user/100000'
-        response = self.client.get(url_id)
+        response = self.client.get(url_id, headers=self.headers)
         self.assertEqual(response.status_code, 404)
 
         url_username = '/user/USERNAME'
-        response = self.client.get(url_username)
+        response = self.client.get(url_username, headers=self.headers)
         self.assertEqual(response.status_code, 404)
     
     def test_update(self):
-        user = {
-            "username": "UT",
-            "first_name": ".......",
-            "last_name": ".......",
-            "email": ".......",
-            "password": "21212121",
-            "phone": ".......",
-            "user_status": True
-            }
-        created = self.client.post(self.url, json=user)
+        self.client.post(self.url, json=self.user)
 
-        url_id = f'/user/{created.json["id"]}'
         updated_fields = {
             "first_name": "updated_first_name",
             "last_name": "updated_last_name",
             "password": "45454545"
         }
-        response = self.client.put(url_id, json=updated_fields)
+        response = self.client.put(self.url, json=updated_fields, headers=self.headers)
         self.assertEqual(response.status_code, 200)
 
         expected_first_name, expected_last_name = "updated_first_name", "updated_last_name"
         actual_first_name, actual_last_name = response.json["first_name"], response.json["last_name"]
         self.assertEqual(actual_first_name, expected_first_name)
         self.assertEqual(actual_last_name, expected_last_name)
+    
+    def test_update_error(self):
+        self.client.post(self.url, json=self.user)
 
-        updated_errors = [{
+        updated_error = {
             "first_name": True,
             "last_name": "updated_last_name",
             "password": "45454545"
-        },
-        {
-            "first_name": "updated_first_name",
-            "last_name": "updated_last_name",
-            "password": "111"
-        }]
-        for i in range(len(updated_errors)):
-            response = self.client.put(url_id, json=updated_errors[i])
-            self.assertEqual(response.status_code, 400)
-    
-    def test_update_error(self):
-        url_id = '/user/100000'
-        updated_fields = {
-            "first_name": "updated_first_name",
-            "last_name": "updated_last_name",
-            "password": "45454545"
         }
-        response = self.client.put(url_id, json=updated_fields)
-        self.assertEqual(response.status_code, 404)
+        response = self.client.put(self.url, json=updated_error, headers=self.headers)
+        self.assertEqual(response.status_code, 400)
     
     def test_delete(self):
-        user = {
-            "username": "UT",
-            "first_name": ".......",
-            "last_name": ".......",
-            "email": ".......",
-            "password": "21212121",
-            "phone": ".......",
-            "user_status": True
-            }
-        created = self.client.post(self.url, json=user)
+        created = self.client.post(self.url, json=self.user)
 
         url_username = f'/user/{created.json["username"]}'
-        response = self.client.delete(url_username)
+        response = self.client.delete(url_username, headers=self.headers)
         self.assertEqual(response.status_code, 200)
     
     def test_delete_error(self):
+        self.client.post(self.url, json=self.user)
+
         url_username = '/user/USERNAME'
-        response = self.client.delete(url_username)
+        response = self.client.delete(url_username, headers=self.headers)
         self.assertEqual(response.status_code, 404)

@@ -25,3 +25,8 @@ class AccessSchema(Schema):
     user_id = fields.Integer()
     start = fields.DateTime()
     end = fields.DateTime()
+
+
+class LoginSchema(Schema):
+    username = fields.String()
+    password = fields.String()
