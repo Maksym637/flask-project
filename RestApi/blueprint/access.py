@@ -4,12 +4,15 @@ from marshmallow import ValidationError
 from models import User, Auditorium, Access
 from schemas import AccessSchema
 from datetime import datetime, timedelta
+from authorization import auth
+from sqlalchemy import and_
 
 
 access = Blueprint("access", __name__)
 
 
 @access.route("/access", methods=["POST"])
+@auth.login_required
 def create_access():
     """_summary_
     Create and submit reservation to the server.
@@ -19,6 +22,10 @@ def create_access():
     """
 
     data = request.get_json(force=True)
+
+    login_entry = Session.query(User).filter_by(username=auth.current_user()).first()
+    if login_entry.id != int(data.get('user_id')):
+        return Response(status=401, response="[YOU CANNOT BOOK AUDITORIUM FOR ANOTHER PERSON]")
 
     try:
         AccessSchema().load(data)
@@ -87,6 +94,7 @@ def get_access(user_id):
 
 
 @access.route("/access/<int:auditorium_id>", methods=["DELETE"])
+@auth.login_required
 def delete_access(auditorium_id):
     """_summary_
     Deletes all reservation data from the server.
@@ -103,8 +111,12 @@ def delete_access(auditorium_id):
         return Response(status=404, response="[SUCH AUDITORIUM ID DOES NOT EXIST]")
 
     access = Session.query(Access).filter_by(auditorium_id=auditorium_id).first()
+    login_entry = Session.query(User).filter_by(username=auth.current_user()).first()
+    login_access_user = Session.query(Access).filter(and_(Access.user_id == login_entry.id, Access.auditorium_id == auditorium_id)).first()
     if access is None:
         return Response(status=404, response="[THERE IS NO RESERVATION FOR THIS AUDITORIUM]")
+    if not login_access_user:
+        return Response(status=401, response="[YOU HAVE NO ACCESS]")
     Session.delete(access)
     Session.commit()
 

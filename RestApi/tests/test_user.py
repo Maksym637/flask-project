@@ -11,20 +11,6 @@ class TestUser(unittest.TestCase):
     After that tests : POST, GET, PUT and DELETE are tested below.
     """
 
-    url = '/user'
-
-    user = {
-            "username": "UT",
-            "first_name": ".......",
-            "last_name": ".......",
-            "email": ".......",
-            "password": "21212121",
-            "phone": ".......",
-            "user_status": True
-        }
-    
-    headers = {"Authorization": f"Basic VVQ6MjEyMTIxMjE="}
-
     def setUp(self):
         self.app_context = app.app_context()
         self.app_context.push()
@@ -39,6 +25,20 @@ class TestUser(unittest.TestCase):
         self.app = None
         self.app_context.pop()
         self.client = None
+    
+    url = '/user'
+
+    user = {
+            "username": "UT",
+            "first_name": ".......",
+            "last_name": ".......",
+            "email": ".......",
+            "password": "21212121",
+            "phone": ".......",
+            "user_status": True
+        }
+    
+    headers = {"Authorization": f"Basic VVQ6MjEyMTIxMjE="}
 
     def test_create(self):
         user = {
