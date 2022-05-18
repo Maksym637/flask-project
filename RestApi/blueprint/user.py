@@ -46,7 +46,7 @@ def is_simple_password(string: str) -> bool:
     return flag
 
 
-@user.route("/login", methods=["GET"])
+@user.route("/login", methods=["POST"])
 def login_user():
     """_summary_
     An encoded string is created for logging

@@ -95,7 +95,7 @@ class TestUser(unittest.TestCase):
         self.client.post(self.url, json=user)
 
         url_login = '/login'
-        response = self.client.get(url_login, data=json.dumps({"username": "UT", "password": "232323"}))
+        response = self.client.post(url_login, data=json.dumps({"username": "UT", "password": "232323"}))
         self.assertEqual(response.status_code, 200)
     
     def test_retrieve(self):
