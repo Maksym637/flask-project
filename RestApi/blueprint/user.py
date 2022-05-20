@@ -112,6 +112,18 @@ def create_user():
     return jsonify(UserSchema().dump(entry))
 
 
+@user.route("/user", methods=["GET"])
+def get_users():
+    """_summary_
+    Retrieves all data about users from the server.
+
+    Returns:
+        json: returns all users attributes.
+    """
+    entries = Session.query(User).all()
+    return jsonify(UserSchema(many=True).dump(entries))
+
+
 @user.route("/user/<string:username>", methods=["GET"])
 @auth.login_required
 def get_user_by_username(username):
