@@ -71,7 +71,7 @@ def login_user():
     if user is not None and check_password_hash(user.password, data["password"]):
         return base64_message
     else:
-        return Response(status=404, response="[INVALID PASSWORD OR USERNAME]]")
+        return Response(status=404, response="[INVALID PASSWORD OR USERNAME]")
 
 
 @user.route("/user", methods=["POST"])

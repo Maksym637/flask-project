@@ -93,6 +93,19 @@ def get_access(user_id):
     return jsonify(AccessSchema(many=True).dump(entries))
 
 
+@access.route("/access", methods=["GET"])
+def get_accesses():
+    """_summary_
+    Retrieves all data about access from the server.
+
+    Returns:
+        json: returns all accesses attributes.
+    """
+
+    entries = Session.query(Access).all()
+    return jsonify(AccessSchema(many=True).dump(entries))
+
+
 @access.route("/access/<int:auditorium_id>", methods=["DELETE"])
 @auth.login_required
 def delete_access(auditorium_id):
