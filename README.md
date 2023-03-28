@@ -3,8 +3,7 @@
 #### Prepared by *Maksym Oliinyk*
 ***
 ### Linked projects
-- [Front-End project](https://github.com/Maksym637/frontend-project)
-- [Test Automation project](https://github.com/Maksym637/selenium-testing-project)
+#### [Front-End part](https://github.com/Maksym637/frontend-project), [Test Automation part](https://github.com/Maksym637/selenium-testing-project)
 ***
 ### Description
 Simple application for reservation auditoriums on a specific time.
