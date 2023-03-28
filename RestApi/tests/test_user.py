@@ -1,13 +1,13 @@
+import json
+import unittest
 from run_app import app
 from models import Session, User
-import unittest
-import json
 
 
 class TestUser(unittest.TestCase):
     """_summary_
     Testing all user methods.
-    I define two methods : setUp() and tearDown() (setUp - adds all prerequisite steps, tearDown - clean-up all steps).
+    I define two methods : setUp() and tearDown().
     After that tests : POST, GET, PUT and DELETE are tested below.
     """
 
@@ -19,13 +19,13 @@ class TestUser(unittest.TestCase):
     def tearDown(self):
         username = "UT"
         entry = Session.query(User).filter_by(username=username).first()
-        if entry is not None:   
+        if entry is not None:
             Session.delete(entry)
             Session.commit()
         self.app = None
         self.app_context.pop()
         self.client = None
-    
+
     url = '/user'
 
     user = {
@@ -37,7 +37,7 @@ class TestUser(unittest.TestCase):
             "phone": ".......",
             "user_status": True
         }
-    
+
     headers = {"Authorization": f"Basic VVQ6MjEyMTIxMjE="}
 
     def test_create(self):
@@ -54,11 +54,13 @@ class TestUser(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         expected_username, expected_first_name, expected_last_name = "UT", "User", "Test"
-        actual_username, actual_first_name, actual_last_name = response.json["username"], response.json["first_name"], response.json["last_name"]
+        actual_username = response.json["username"]
+        actual_first_name = response.json["first_name"]
+        actual_last_name = response.json["last_name"]
         self.assertEqual(actual_username, expected_username)
         self.assertEqual(actual_first_name, expected_first_name)
         self.assertEqual(actual_last_name, expected_last_name)
-    
+
     def test_create_error(self):
         users = [{
             "username": "UT",
@@ -81,7 +83,7 @@ class TestUser(unittest.TestCase):
         for i in range(len(users)):
             response = self.client.post(self.url, json=users[i])
             self.assertEqual(response.status_code, 400)
-    
+
     def test_login(self):
         user = {
             "username": "UT",
@@ -97,7 +99,7 @@ class TestUser(unittest.TestCase):
         url_login = '/login'
         response = self.client.post(url_login, data=json.dumps({"username": "UT", "password": "232323"}))
         self.assertEqual(response.status_code, 200)
-    
+
     def test_retrieve(self):
         created = self.client.post(self.url, json=self.user)
 
@@ -108,7 +110,7 @@ class TestUser(unittest.TestCase):
         url_username = f'/user/{created.json["username"]}'
         response = self.client.get(url_username, headers=self.headers)
         self.assertEqual(response.status_code, 200)
-    
+
     def test_retrieve_error(self):
         self.client.post(self.url, json=self.user)
 
@@ -119,7 +121,7 @@ class TestUser(unittest.TestCase):
         url_username = '/user/USERNAME'
         response = self.client.get(url_username, headers=self.headers)
         self.assertEqual(response.status_code, 404)
-    
+
     def test_update(self):
         self.client.post(self.url, json=self.user)
 
@@ -135,7 +137,7 @@ class TestUser(unittest.TestCase):
         actual_first_name, actual_last_name = response.json["first_name"], response.json["last_name"]
         self.assertEqual(actual_first_name, expected_first_name)
         self.assertEqual(actual_last_name, expected_last_name)
-    
+
     def test_update_error(self):
         self.client.post(self.url, json=self.user)
 
@@ -146,14 +148,14 @@ class TestUser(unittest.TestCase):
         }
         response = self.client.put(self.url, json=updated_error, headers=self.headers)
         self.assertEqual(response.status_code, 400)
-    
+
     def test_delete(self):
         created = self.client.post(self.url, json=self.user)
 
         url_username = f'/user/{created.json["username"]}'
         response = self.client.delete(url_username, headers=self.headers)
         self.assertEqual(response.status_code, 200)
-    
+
     def test_delete_error(self):
         self.client.post(self.url, json=self.user)
 

@@ -1,12 +1,10 @@
-from models import Session
+from datetime import datetime, timedelta
+from models import Session, User, Auditorium, Access
 from flask import jsonify, request, Response, Blueprint
 from marshmallow import ValidationError
-from models import User, Auditorium, Access
 from schemas import AccessSchema
-from datetime import datetime, timedelta
 from authorization import auth
 from sqlalchemy import and_
-
 
 access = Blueprint("access", __name__)
 
@@ -70,7 +68,7 @@ def create_access():
         Session.commit()
     except:
         return "[SUCH USER OR AUDITORIUM NOT FOUND]", 404
-    
+
     return jsonify(AccessSchema().dump(entry))
 
 
@@ -88,7 +86,9 @@ def get_access(user_id):
 
     entry = Session.query(User).filter_by(id=user_id).first()
     if entry is None:
-        return Response(status=404, response="[SUCH USER ID DOES NOT EXIST. THUS, THERE ARE NO RESERVATION FOR HIM]")
+        return Response(
+            status=404, response="[SUCH USER ID DOES NOT EXIST. THUS, THERE ARE NO RESERVATION FOR HIM]"
+        )
     entries = Session.query(Access).filter_by(user_id=user_id).all()
     return jsonify(AccessSchema(many=True).dump(entries))
 
@@ -125,7 +125,9 @@ def delete_access(auditorium_id):
 
     access = Session.query(Access).filter_by(auditorium_id=auditorium_id).first()
     login_entry = Session.query(User).filter_by(username=auth.current_user()).first()
-    login_access_user = Session.query(Access).filter(and_(Access.user_id == login_entry.id, Access.auditorium_id == auditorium_id)).first()
+    login_access_user = Session.query(Access).filter(
+        and_(Access.user_id==login_entry.id, Access.auditorium_id==auditorium_id)
+    ).first()
     if access is None:
         return Response(status=404, response="[THERE IS NO RESERVATION FOR THIS AUDITORIUM]")
     if not login_access_user:

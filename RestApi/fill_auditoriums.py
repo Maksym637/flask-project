@@ -1,6 +1,6 @@
 from models import Session, Auditorium
 
-def main():
+if __name__ == '__main__':
     auditorium_1 = Auditorium(number=10, max_people=100, is_free=True)
     auditorium_2 = Auditorium(number=15, max_people=200, is_free=True)
     auditorium_3 = Auditorium(number=20, max_people=250, is_free=True)
@@ -17,6 +17,3 @@ def main():
 
     for i in range(5):
         print(Session.query(Auditorium).all()[i])
-
-if __name__ == '__main__':
-    main()

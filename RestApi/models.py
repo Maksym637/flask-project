@@ -1,10 +1,24 @@
+import configparser
 from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy import Column, ForeignKey, Integer, VARCHAR, DateTime, Boolean
 
-engine = create_engine('mysql+pymysql://root:Barca2381843@localhost/ReservAuditorium')
+config = configparser.ConfigParser()
+config.read("../credentials.ini")
+config.sections()
+
+DB = {
+    "username": config["Database"]["db_username"],
+    "password": config["Database"]["db_password"],
+    "hostname": config["Database"]["db_hostname"],
+    "name": config["Database"]["db_name"]
+}
+
+engine = create_engine(
+    f"mysql+pymysql://{DB['username']}:{DB['password']}@{DB['hostname']}/{DB['name']}"
+)
 engine.connect()
 
 SessionFactory = sessionmaker(bind=engine)
@@ -49,7 +63,8 @@ class User(BaseModel):
     phone = Column(VARCHAR(15))
     user_status = Column(Boolean)
 
-    def __init__(self, username :str, first_name: str=None, last_name: str=None, email: str=None, password: str=None, phone: str=None, user_status: bool=False) -> None:
+    def __init__(self, username :str, first_name: str=None, last_name: str=None, email: str=None,
+                 password: str=None, phone: str=None, user_status: bool=False) -> None:
         """_summary_
         Constructs all the necessary attributes for the user object.
 
@@ -60,7 +75,7 @@ class User(BaseModel):
             email (str, optional): electronic mail of the user. Defaults to None.
             password (str, optional): user's password. Defaults to None.
             phone (str, optional): user's phone. Defaults to None.
-            user_status (bool, optional): determines whether the user is an admin or not. Defaults to False.
+            user_status (bool, optional): determines whether the user is an admin or not. 
         """
 
         self.username = username
@@ -70,7 +85,7 @@ class User(BaseModel):
         self.password = password
         self.phone = phone
         self.user_status = user_status
-    
+
     def __str__(self) -> str:
         """_summary_
         Returns all user attributes.
@@ -120,14 +135,14 @@ class Auditorium(BaseModel):
 
         Args:
             number (int, optional): the auditorium number. Defaults to None.
-            max_people (int, optional): the maximum number of people that can be in the auditorium. Defaults to None.
+            max_people (int, optional): the maximum number of people that can be in the auditorium.
             is_free (bool, optional): check if auditorium is free. Defaults to False.
         """
 
         self.number = number
         self.max_people = max_people
         self.is_free = is_free
-    
+
     def __str__(self) -> str:
         """_summary_
         Returns all auditorium attributes.
@@ -165,7 +180,9 @@ class Access(BaseModel):
     __tablename__ = "access"
 
     id = Column(Integer, primary_key=True)
-    auditorium_id = Column(Integer, ForeignKey(Auditorium.id, onupdate="CASCADE", ondelete="CASCADE"))
+    auditorium_id = Column(
+        Integer, ForeignKey(Auditorium.id, onupdate="CASCADE", ondelete="CASCADE")
+    )
     user_id = Column(Integer, ForeignKey(User.id, onupdate="CASCADE", ondelete="CASCADE"))
     start = Column(DateTime)
     end = Column(DateTime)
@@ -185,7 +202,7 @@ class Access(BaseModel):
         self.user_id = user_id
         self.start = start
         self.end = end
-    
+
     def __str__(self) -> str:
         """_summary_
         Returns all access attributes.

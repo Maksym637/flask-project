@@ -1,13 +1,12 @@
+import unittest
 from run_app import app
 from models import Session, User, Auditorium
-from datetime import datetime
-import unittest
 
 
 class TestAccess(unittest.TestCase):
     """_summary_
     Testing all access methods.
-    I define two methods : setUp() and tearDown() (setUp - adds all prerequisite steps, tearDown - clean-up all steps).
+    I define two methods : setUp() and tearDown().
     After that tests : POST, GET, PUT and DELETE are tested below.
     """
 
@@ -15,20 +14,20 @@ class TestAccess(unittest.TestCase):
         self.app_context = app.app_context()
         self.app_context.push()
         self.client = app.test_client()
-    
+
     def tearDown(self):
         username = "UT"
         user = Session.query(User).filter_by(username=username).first()
         number = 18
         auditorium = Session.query(Auditorium).filter_by(number=number).first()
-        if user is not None or auditorium is not None:   
+        if user is not None or auditorium is not None:
             Session.delete(user)
             Session.delete(auditorium)
             Session.commit()
         self.app = None
         self.app_context.pop()
         self.client = None
-    
+
     url_user = '/user'
     url_auditorium = '/auditorium'
 
@@ -46,8 +45,8 @@ class TestAccess(unittest.TestCase):
         "max_people": "400",
         "is_free": True
         }
-    
-    headers = {"Authorization": f"Basic VVQ6MjEyMTIxMjE="}
+
+    headers = {"Authorization": "Basic VVQ6MjEyMTIxMjE="}
 
     def test_create_delete(self):
         created_user = self.client.post(self.url_user, json=self.user)
@@ -70,7 +69,7 @@ class TestAccess(unittest.TestCase):
         url_access_delete = f'/access/{created_auditorium.json["id"]}'
         response = self.client.delete(url_access_delete, headers=self.headers)
         self.assertEqual(response.status_code, 200)
-    
+
     def test_create_error_time(self):
         created_user = self.client.post(self.url_user, json=self.user)
         created_auditorium = self.client.post(self.url_auditorium, json=self.auditorium)
@@ -97,7 +96,7 @@ class TestAccess(unittest.TestCase):
         for i in range(len(accesses)):
             response = self.client.post(url_access, json=accesses[i], headers=self.headers)
             self.assertEqual(response.status_code, 400)
-    
+
     def test_create_error_reservation(self):
         created_user = self.client.post(self.url_user, json=self.user)
         created_auditorium = self.client.post(self.url_auditorium, json=self.auditorium)
@@ -138,11 +137,11 @@ class TestAccess(unittest.TestCase):
         for i in range(len(accesses)):
             response = self.client.post(url_access, json=accesses[i], headers=self.headers)
             self.assertEqual(response.status_code, 403)
-        
+
         url_access_delete = f'/access/{created_auditorium.json["id"]}'
         response = self.client.delete(url_access_delete, headers=self.headers)
         self.assertEqual(response.status_code, 200)
-    
+
     def test_retrieve(self):
         created_user = self.client.post(self.url_user, json=self.user)
         created_auditorium = self.client.post(self.url_auditorium, json=self.auditorium)
@@ -163,12 +162,12 @@ class TestAccess(unittest.TestCase):
         url_access_delete = f'/access/{created_auditorium.json["id"]}'
         response = self.client.delete(url_access_delete, headers=self.headers)
         self.assertEqual(response.status_code, 200)
-    
+
     def test_retrieve_error(self):
         url_access_get = '/access/100000'
         response = self.client.get(url_access_get)
         self.assertEqual(response.status_code, 404)
-    
+
     def test_delete_error(self):
         created_user = self.client.post(self.url_user, json=self.user)
         created_auditorium = self.client.post(self.url_auditorium, json=self.auditorium)

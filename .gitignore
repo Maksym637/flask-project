@@ -128,7 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-alembic
-alembic.ini
-requirements.txt
-__init__.py
+# file with database credentials 
+credentials.ini
+
+# vscode configurations
+.vscode

@@ -1,9 +1,7 @@
-from models import Session
+from models import Session, Auditorium
 from flask import jsonify, request, Response, Blueprint
 from marshmallow import ValidationError
-from models import Auditorium
 from schemas import AuditoriumSchema
-
 
 auditorium = Blueprint("auditorium", __name__)
 
@@ -23,14 +21,14 @@ def create_auditorium():
         AuditoriumSchema().load(data)
     except ValidationError:
         return "[THIS IS A VALIDATION ERROR]", 400
-    
+
     try:
         entry = Auditorium(**data)
         Session.add(entry)
         Session.commit()
     except Exception:
         return "[THIS IS A TYPE ERROR]\n[PLEASE, WRITE CORRECT DATA TYPE]", 400
-    
+
     return jsonify(AuditoriumSchema().dump(entry))
 
 
@@ -79,23 +77,25 @@ def update_auditorium_by_id(id):
 
     entry = Session.query(Auditorium).filter_by(id=id).first()
     if entry is None:
-        return Response(status=404, response="[SUCH AUDITORIUM DOES NOT EXIST]\n[YOU CAN'T UPDATE IT]")
-    
+        return Response(
+            status=404, response="[SUCH AUDITORIUM DOES NOT EXIST]\n[YOU CAN'T UPDATE IT]"
+        )
+
     data = request.get_json(force=True)
     try:
         AuditoriumSchema().load(data)
     except ValidationError:
         return "[THIS IS A VALIDATION ERROR]", 400
-    
+
     for key, value in data.items():
         setattr(entry, key, value)
-    
+
     try:
         Session.add(entry)
         Session.commit()
     except Exception:
         return "[THIS IS A TYPE ERROR]\n[PLEASE, WRITE CORRECT DATA TYPE]", 400
-    
+
     return jsonify(AuditoriumSchema().dump(entry))
 
 

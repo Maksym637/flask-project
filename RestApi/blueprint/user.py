@@ -1,14 +1,12 @@
+import base64
 from flask_bcrypt import check_password_hash
-from models import Session
+from models import Session, User
 from flask import jsonify, request, Response, Blueprint
 from marshmallow import ValidationError
-from models import User
 from schemas import UserSchema, LoginSchema
 from authorization import auth
 import sqlalchemy
 import bcrypt
-import base64
-
 
 user = Blueprint("user", __name__)
 
@@ -54,14 +52,14 @@ def login_user():
     Returns:
         str: base64_message
     """
-    
+
     data = request.get_json(force=True)
 
     try:
         LoginSchema().load(data)
     except ValidationError:
         return "[THIS IS A VALIDATION ERROR]", 400
-    
+
     message = data["username"] + ":" + data["password"]
     message_bytes = message.encode('ascii')
     base64_bytes = base64.b64encode(message_bytes)
@@ -70,8 +68,7 @@ def login_user():
 
     if user is not None and check_password_hash(user.password, data["password"]):
         return base64_message
-    else:
-        return Response(status=404, response="[INVALID PASSWORD OR USERNAME]")
+    return Response(status=404, response="[INVALID PASSWORD OR USERNAME]")
 
 
 @user.route("/user", methods=["POST"])
@@ -82,7 +79,7 @@ def create_user():
     Returns:
         json: returns all user attributes.
     """
-    
+
     data = request.get_json(force=True)
 
     if is_short_password(request.json.get('password', None)):
@@ -94,7 +91,7 @@ def create_user():
         UserSchema().load(data)
     except ValidationError:
         return "[THIS IS A VALIDATION ERROR]", 400
-    
+
     password = request.json.get('password', None)
     hashed_password = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
     data.update({"password": hashed_password})
@@ -108,7 +105,7 @@ def create_user():
             return "[DUPLICATE UNIQUE VALUE]", 400
         else:
             return "[THIS IS A TYPE ERROR]\n[PLEASE, WRITE CORRECT DATA TYPE]", 400
-    
+
     return jsonify(UserSchema().dump(entry))
 
 
@@ -187,7 +184,7 @@ def update_user_by_id():
         return "[THIS PASSWORD IS TOO SHORT]", 400
     elif is_simple_password(request.json.get('password', None)):
         return "[THIS PASSWORD IS VERY SIMPLE]", 400
-    
+
     try:
         UserSchema().load(data)
     except ValidationError:
@@ -200,13 +197,13 @@ def update_user_by_id():
 
     for key, value in data.items():
         setattr(entry, key, value)
-    
+
     try:
         Session.add(entry)
         Session.commit()
     except Exception:
         return "[THIS IS A TYPE ERROR]\n[PLEASE, WRITE CORRECT DATA TYPE]", 400
-    
+
     return jsonify(UserSchema().dump(entry))
 
 
