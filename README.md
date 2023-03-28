@@ -2,6 +2,10 @@
 ***
 #### Prepared by *Maksym Oliinyk*
 ***
+### Linked projects
+- [Front-End project](https://github.com/Maksym637/frontend-project)
+- [Test Automation project](https://github.com/Maksym637/selenium-testing-project)
+***
 ### Description
 Simple application for reservation auditoriums on a specific time.
 
@@ -16,6 +20,43 @@ The application should allow:
   * reservation times must not overlap.
 
 The RESTful API is built using _Flask_ framework and _MySQL_ database.
+***
+### Launch project :
+- Clone a repository 
+- Create and activate a virtual environment by command :
+```sh
+python -m venv venv
+```
+- Install all required libraries by command :
+```sh
+pip install -r requirements.txt
+```
+- Create the _credentials.ini_ file with the following :
+```ini
+[Database]
+db_username = database_username
+db_password = database_password
+db_hostname = database_hostname
+db_name = database_name
+```
+- After that move to the _RestApi_ folder and run project :
+```sh
+python run_app.py
+```
+***
+### Execute unit tests :
+- Run all tests by command :
+```sh
+python -m unittest
+```
+- Run all tests with coverage :
+```sh
+coverage run -m unittest
+```
+- See coverage :
+```sh
+coverage report -m
+```
 ***
 ### API endpoints
 * **user :**

@@ -38,7 +38,7 @@ class TestUser(unittest.TestCase):
             "user_status": True
         }
 
-    headers = {"Authorization": f"Basic VVQ6MjEyMTIxMjE="}
+    headers = {"Authorization": "Basic VVQ6MjEyMTIxMjE="}
 
     def test_create(self):
         user = {
@@ -134,7 +134,8 @@ class TestUser(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
 
         expected_first_name, expected_last_name = "updated_first_name", "updated_last_name"
-        actual_first_name, actual_last_name = response.json["first_name"], response.json["last_name"]
+        actual_first_name = response.json["first_name"]
+        actual_last_name = response.json["last_name"]
         self.assertEqual(actual_first_name, expected_first_name)
         self.assertEqual(actual_last_name, expected_last_name)
 
