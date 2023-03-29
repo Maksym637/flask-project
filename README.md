@@ -20,7 +20,7 @@ The application should allow:
 
 The RESTful API is built using _Flask_ framework and _MySQL_ database.
 ***
-### Launch project :
+### Launch project
 - Clone a repository 
 - Create and activate a virtual environment by command :
 ```sh
@@ -43,7 +43,7 @@ db_name = database_name
 python run_app.py
 ```
 ***
-### Execute unit tests :
+### Execute unit tests
 - Run all tests by command :
 ```sh
 python -m unittest
